@@ -18,14 +18,13 @@ class PostModelTest(TestCase):
         )
         cls.post = Post.objects.create(
             author=cls.user,
-            text='Тестовый пост',
+            text='Тестовый пост 15 символов',
         )
 
     def test_models_have_correct_object_names(self):
         """Проверяем, что у моделей корректно работает __str__."""
-        if Post:
-            post_str = Post.objects.get(pk=1)
-            self.assertEqual(str(post_str), post_str.text)
-        if Group:
-            group_str = Group.objects.get(pk=1)
-            self.assertEqual(str(group_str), group_str.title)
+        post_str = Post.objects.get(pk=1)
+        response = str(post_str)
+        self.assertEqual(response, post_str.text[:15])
+        group_str = Group.objects.get(pk=1)
+        self.assertEqual(str(group_str), group_str.title)

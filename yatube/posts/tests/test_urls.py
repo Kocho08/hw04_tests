@@ -29,7 +29,7 @@ class PostURLTest(TestCase):
             group=cls.group,
         )
 
-        cls.templates = [
+        cls.urls_list = [
             '/',
             f'/group/{cls.group.slug}',
             f'/profile/{cls.user_author}',
@@ -58,7 +58,7 @@ class PostURLTest(TestCase):
 
     def test_url_exist_for_all_users(self):
         """Доступ всех страниц любому пользователю"""
-        for address in self.templates:
+        for address in self.urls_list:
             with self.subTest(address):
                 response = self.guest_client.get(address, follow=True)
                 self.assertEqual(response.status_code, HTTPStatus.OK)

@@ -18,60 +18,18 @@ class PostPagesTests(TestCase):
             slug='test-slug',
             description='Тестовое описание',
         )
-        cls.post = Post.objects.create(
-            text='Тестовый пост 1',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
-        cls.post = Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user_author,
-            group=cls.group,
-        )
+        for i in range(1, 11):
+            cls.post = Post.objects.create(
+                text=f'Тестовый пост {i}',
+                author=cls.user_author,
+                group=cls.group,
+            )
 
     def setUp(self):
+        self.guest_client = Client()
+        self.user = User.objects.create_user(username='NoName')
         self.authorized_client = Client()
-        self.authorized_client.force_login(self.user_author)
+        self.authorized_client.force_login(self.user)
         self.author_client = Client()
         self.author_client.force_login(self.user_author)
 
