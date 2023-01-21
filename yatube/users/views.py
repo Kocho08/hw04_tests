@@ -11,23 +11,23 @@ class SignUp(CreateView):
 
 class PasswordChange(CreateView):
     form_class = CreationForm
-    success_url = reverse_lazy('users:password_change_done')
+    success_url = reverse_lazy('posts:password_change_done')
     template_name = 'users/password_change_form.html'
 
 
 class PasswordReset(CreateView):
     form_class = CreationForm
-    success_url = reverse_lazy('users:password_reset_done')
+    success_url = reverse_lazy('posts:password_reset_done')
     template_name = 'users/password_reset_form.html'
 
 
 class PasswordResetConfirm(CreateView):
     form_class = CreationForm
-    success_url = reverse_lazy('users:password_reset_complete')
+    success_url = reverse_lazy('posts:password_reset_complete')
     template_name = 'users/password_reset_confirm.html'
 
 
 class PasswordResetComplete(CreateView):
     form_class = CreationForm
-    success_url = reverse_lazy('users:password_reset_complete')
+    success_url = reverse_lazy('posts:password_reset_complete')
     template_name = 'users/password_reset_confirm.html'
