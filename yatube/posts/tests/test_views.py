@@ -12,7 +12,6 @@ class PostPagesTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.user_author = User.objects.create_user(username='StasBasov')
-
         cls.group = Group.objects.create(
             title='Заголовок',
             slug='test-slug',
@@ -47,7 +46,6 @@ class PostPagesTests(TestCase):
             reverse('posts:post_edit',
                     kwargs={'post_id': '1'}): 'posts/create_post.html',
         }
-
         for reverse_name, template in templates_pages_names.items():
             with self.subTest(reverse_name=reverse_name):
                 response = self.author_client.get(reverse_name)
@@ -74,13 +72,11 @@ class PostPagesTests(TestCase):
             reverse('posts:group_list', kwargs={'slug': 'test-slug'}),
             reverse('posts:profile', kwargs={'username': self.user_author}),
         )
-
         self.post = Post.objects.create(
             text='Тестовый пост 1',
             author=self.user_author,
             group=self.group,
         )
-
         for page in pages_names:
             with self.subTest(page=page):
                 response = self.authorized_client.get(page)

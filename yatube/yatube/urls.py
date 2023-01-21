@@ -15,6 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
+
+handler400 = 'core.views.bad_request'
+handler404 = 'core.views.page_not_found'
+handler403csrf = 'core.views.csrf_failure'
+handler403 = 'core.views.permission_denied'
+handler500 = 'core.views.server_error'
 
 urlpatterns = [
     path('', include('posts.urls', namespace='posts')),
@@ -25,3 +33,7 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('auth/', include('django.contrib.auth.urls')),
 ]
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

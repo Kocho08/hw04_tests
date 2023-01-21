@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Custom 400{% endblock %}
+{% block content %}
+  <h1>Custom 400</h1>
+  <p>Запрос к серверу содержит синтаксическую ошибку</p>
+  <a href="{% url 'posts:index' %}">Идите на главную</a>
+{% endblock %}
