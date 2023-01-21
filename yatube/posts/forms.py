@@ -8,7 +8,7 @@ User = get_user_model()
 class PostForm(forms.ModelForm):
     class Meta():
         model = Post
-        fields = ('text', 'group', 'image')
+        fields = ('text', 'group')
         group = forms.ModelChoiceField(
             queryset=Post.objects.all(), required=False, to_field_name='group')
         widgets = {

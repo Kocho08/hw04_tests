@@ -91,4 +91,3 @@ def post_edit(request, post_id):
         'post': post,
     }
     return render(request, 'posts/create_post.html', context)
-# enctype="multipart/form-data"
