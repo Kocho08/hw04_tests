@@ -34,7 +34,7 @@ def group_posts(request, slug):
 def profile(request, username):
     # Здесь код запроса к модели и создание словаря контекста
     author = get_object_or_404(User, username=username)
-    user_posts = Post.objects.select_related('author').order_by('-pub_date')
+    user_posts = author.posts.select_related('author').order_by('-pub_date')
     paginator = Paginator(user_posts, settings.POSTS_MAX)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -42,6 +42,7 @@ def profile(request, username):
         'author': author,
         'user_posts': user_posts,
         'page_obj': page_obj,
+
     }
     return render(request, 'posts/profile.html', context)
 
@@ -91,4 +92,3 @@ def post_edit(request, post_id):
         'post': post,
     }
     return render(request, 'posts/create_post.html', context)
-# enctype="multipart/form-data"

@@ -27,22 +27,16 @@ class Post(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Автор'
+        related_name='posts',
+        help_text='Текст нового поста'
     )
     group = models.ForeignKey(
         Group,
-        on_delete=models.SET_NULL,
-        related_name='posts',
         blank=True,
         null=True,
-        verbose_name='Группа',
-        help_text='Выберите группу'
-    )
-    # Поле для картинки (необязательное)
-    image = models.ImageField(
-        'Картинка',
-        upload_to='posts/',
-        blank=True
+        related_name='posts',
+        on_delete=models.SET_NULL,
+        help_text='Группа, к которой будет относиться пост'
     )
 
     def __str__(self):
