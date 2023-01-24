@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-# 12312312321321312
+
 POST_SELECT = 'author'
 
 
@@ -38,6 +38,32 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
         help_text='Группа, к которой будет относиться пост'
     )
+    image = models.ImageField(
+        'Картинка',
+        upload_to='posts/',
+        blank=True
+    )
 
     def __str__(self):
         return self.text[:15]
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post, blank=True, null=True,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    text = models.TextField(
+        verbose_name='Текст комментария',
+        help_text='Введите текст комментария'
+    )
+    created = models.DateTimeField(
+        verbose_name='Дата написания комментария',
+        auto_now_add=True
+    )

@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from posts.models import Post, Group, User
 from http import HTTPStatus
+from django.core.cache import cache
 
 
 User = get_user_model()
@@ -44,10 +45,12 @@ class PostURLTest(TestCase):
             f'/posts/{cls.post.id}/edit/': 'posts/create_post.html',
             '/create/': 'posts/create_post.html',
             '/about/author/': 'about/author.html',
-            '/about/tech/': 'about/tech.html'
+            '/about/tech/': 'about/tech.html',
+
         }
 
     def setUp(self):
+        cache.clear()
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user_author)
@@ -89,7 +92,8 @@ class PostURLTest(TestCase):
                 response = self.authorized_author_client.get(address)
                 self.assertTemplateUsed(response, template)
 
-    def test_not_available_url(self):
+    def test_error_page(self):
         """Несуществующая страница выдаст ошибку"""
         response = self.guest_client.get('/unexisting_page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+        self.assertTemplateUsed(response, 'core/404.html')

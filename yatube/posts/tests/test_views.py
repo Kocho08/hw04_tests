@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from posts.models import Post, Group, User
 from django.urls import reverse
+from django.core.cache import cache
 
 
 User = get_user_model()
@@ -26,6 +27,7 @@ class PostPagesTests(TestCase):
             )
 
     def setUp(self):
+        cache.clear()
         self.guest_client = Client()
         self.user = User.objects.create_user(username='NoName')
         self.authorized_client = Client()
@@ -69,18 +71,17 @@ class PostPagesTests(TestCase):
         """Если при создании поста указать группу,
         то пост появляется на страницах
         """
+        cache.clear()
         pages_names = (
             reverse('posts:index'),
             reverse('posts:group_list', kwargs={'slug': 'test-slug'}),
             reverse('posts:profile', kwargs={'username': self.user_author}),
         )
-
         self.post = Post.objects.create(
             text='Тестовый пост 1',
             author=self.user_author,
             group=self.group,
         )
-
         for page in pages_names:
             with self.subTest(page=page):
                 response = self.authorized_client.get(page)
@@ -92,3 +93,19 @@ class PostPagesTests(TestCase):
                                  'Тестовый пост 1')
                 self.assertEqual(post_group, self.group)
                 self.assertEqual(post_author, self.user_author)
+
+    def test_cache_index(self):
+        """Проверка хранения и очищения кэша для index."""
+        response = self.author_client.get(reverse('posts:index'))
+        posts = response.content
+        Post.objects.create(
+            text='Тестовый пост 1',
+            author=self.user_author,
+        )
+        response_old = self.author_client.get(reverse('posts:index'))
+        old_posts = response_old.content
+        self.assertEqual(old_posts, posts)
+        cache.clear()
+        response_new = self.author_client.get(reverse('posts:index'))
+        new_posts = response_new.content
+        self.assertNotEqual(old_posts, new_posts)
